@@ -1,0 +1,120 @@
+{% extends 'teacher/teacherbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+  a:link {
+        text-decoration: none;
+      }
+  </style>
+</head>
+
+<h2 style="text-align:center;">Add Question for {{ course.course_name }}</h2>
+
+<div class="alert alert-info" style="margin:20px 100px;" role="alert">
+  After submitting, you'll be redirected back to this page to add more questions.
+</div>
+
+<form method="POST" autocomplete="off" style="margin:100px;margin-top: 20px;">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="question">Question *</label>
+        {% render_field questionForm.question|attr:'required:true' class="form-control" placeholder="Example: What is Cloud Computing?" %}
+    </div>
+
+    <div class="form-group">
+        <label for="marks">Marks *</label>
+        {% render_field questionForm.marks|attr:'required:true' class="form-control" placeholder="Example: 5" %}
+    </div>
+
+    <div class="form-group">
+        <label for="question_type">Question Type *</label>
+        {% render_field questionForm.question_type|attr:'required:true' class="form-control" id="question-type-select" %}
+    </div>
+
+    <div id="options-container">
+        <div class="form-group">
+            <label for="option1">Option 1</label>
+            {% render_field questionForm.option1 class="form-control" placeholder="Example: IaaS" %}
+        </div>
+
+        <div class="form-group">
+            <label for="option2">Option 2</label>
+            {% render_field questionForm.option2 class="form-control" placeholder="Example: PaaS" %}
+        </div>
+
+        <div class="form-group">
+            <label for="option3">Option 3</label>
+            {% render_field questionForm.option3 class="form-control" placeholder="Example: SaaS" %}
+        </div>
+
+        <div class="form-group">
+            <label for="option4">Option 4</label>
+            {% render_field questionForm.option4 class="form-control" placeholder="Example: None of the above" %}
+        </div>
+
+        <div class="form-group" id="radio-answer">
+            <label for="answer">Correct Answer (Single Choice) *</label>
+            {% render_field questionForm.answer class="form-control" %}
+        </div>
+
+        <div class="form-group" id="checkbox-answer" style="display:none;">
+            <label for="multiple_answers">Correct Answers (Multiple Choice) *</label>
+            {% render_field questionForm.multiple_answers class="form-control" placeholder="e.g., Option1,Option3" %}
+        </div>
+    </div>
+
+    <div class="form-group" id="text-answer" style="display:none;">
+        <label for="text_answer">Expected Text Answer</label>
+        {% render_field questionForm.text_answer class="form-control" placeholder="Expected text answer for grading reference" %}
+    </div>
+
+    <button type="submit" class="btn btn-success" style="border-radius: 0%;">Submit Question</button>
+    <a href="{% url 'teacher-view-question' %}" class="btn btn-default" style="border-radius: 0%;">View All Questions</a>
+</form>
+
+<script>
+  (function(){
+    const typeSelect = document.getElementById('question-type-select');
+    const optionsContainer = document.getElementById('options-container');
+    const radioAnswer = document.getElementById('radio-answer');
+    const checkboxAnswer = document.getElementById('checkbox-answer');
+    const textAnswer = document.getElementById('text-answer');
+
+    function handleQuestionTypeChange() {
+      const selectedType = typeSelect.value;
+      
+      if (selectedType === 'text') {
+        // Text type: hide all options, show text answer field
+        optionsContainer.style.display = 'none';
+        textAnswer.style.display = 'block';
+      } else if (selectedType === 'checkbox') {
+        // Checkbox type: show options and multiple answers field
+        optionsContainer.style.display = 'block';
+        radioAnswer.style.display = 'none';
+        checkboxAnswer.style.display = 'block';
+        textAnswer.style.display = 'none';
+      } else {
+        // Radio type (default): show options and single answer field
+        optionsContainer.style.display = 'block';
+        radioAnswer.style.display = 'block';
+        checkboxAnswer.style.display = 'none';
+        textAnswer.style.display = 'none';
+      }
+    }
+
+    // Initialize on page load
+    handleQuestionTypeChange();
+    
+    // Handle changes
+    typeSelect.addEventListener('change', handleQuestionTypeChange);
+  })();
+</script>
+
+<br><br><br>
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends 'teacher/teacherbase.html' %}
+{% block content %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+
+<div class="container" style="margin-top:100px; text-align:center;">
+    <div class="alert alert-warning" role="alert">
+        <h3><i class="fas fa-exclamation-triangle"></i> No Course Assigned</h3>
+        <p>You have not been assigned to any course yet. Please contact the administrator to assign a course to you.</p>
+    </div>
+    <a href="/teacher/teacher-dashboard" class="btn btn-primary" style="border-radius: 0%;">Back to Dashboard</a>
+</div>
+
+<br><br><br><br><br><br><br><br>
+{% endblock content %}

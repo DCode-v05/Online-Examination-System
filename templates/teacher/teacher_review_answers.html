@@ -1,0 +1,89 @@
+{% extends 'teacher/teacherbase.html' %}
+{% block content %}
+{%load static%}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+    
+    .empty-message {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+    
+    .empty-message i {
+      font-size: 48px;
+      color: #5cb85c;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<br><br>
+
+<h2 style="text-align:center;">Pending Exam Reviews</h2>
+
+<div class="container" style="margin-top:50px;">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Review Student Text Answers</h6>
+    </div>
+    {% if pending_results %}
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Course</th>
+          <th>Current Score</th>
+          <th>Exam Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for result in pending_results %}
+      <tr>
+        <td><strong>{{ result.student.user.first_name }} {{ result.student.user.last_name }}</strong></td>
+        <td>{{ result.exam.course_name }}</td>
+        <td>
+          <span class="label label-warning">{{ result.marks }} Points</span>
+          <br><small style="color: #999;">Auto-graded only</small>
+        </td>
+        <td>{{ result.date|date:"M d, Y - h:i A" }}</td>
+        <td>
+          <a class="btn btn-primary btn-sm" style="border-radius: 0%;" href="{% url 'teacher-grade-exam' result.id %}">
+            <span class="glyphicon glyphicon-pencil"></span> Grade Now
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-message">
+      <i class="glyphicon glyphicon-ok-circle"></i>
+      <h4>All Caught Up!</h4>
+      <p>There are no pending exams to review at this time.</p>
+      <p style="font-size: 13px; margin-top: 10px;">
+        When students submit exams with text answers, they will appear here for grading.
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<br><br><br><br><br><br>
+{% endblock content %}

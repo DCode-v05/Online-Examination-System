@@ -1,0 +1,71 @@
+{% extends 'exam/adminbase.html' %}
+{% block content %}
+{%load static%}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+<br><br>
+
+<h2 style="text-align:center; margin-top:80px;">Student Exam Results</h2>
+
+<div class="container" style="margin-top:50px;">
+  <div class="panel panel-primary">
+    <div class="panel-heading" style="background-color:#337ab7; color:white;">
+      <h6 class="panel-title" style="font-size:18px; padding:10px;">View Marks - {{ student_name }}</h6>
+    </div>
+    <table class="table table-hover table-bordered table-striped" id="dev-table">
+      <thead style="background-color:#f5f5f5;">
+        <tr>
+          <th style="text-align:center;">Course Name</th>
+          <th style="text-align:center;">Total Marks</th>
+          <th style="text-align:center;">Attempt Number</th>
+          <th style="text-align:center;">Exam Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% if results %}
+        {% for t in results %}
+        <tr>
+          <td style="text-align:center;">{{t.exam}}</td>
+          <td style="text-align:center;"><strong>{{t.marks}}</strong> / {{ total_marks }}</td>
+          <td style="text-align:center;">Attempt {{ forloop.counter }}</td>
+          <td style="text-align:center;">{{t.date}}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="4" style="text-align:center; padding:30px;">
+            <em>No exam results found for this student.</em>
+          </td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:20px; margin-bottom:50px;">
+    <a href="{% url 'admin-view-student-marks' %}" class="btn btn-primary" style="border-radius:0;">
+      <i class="glyphicon glyphicon-arrow-left"></i> Back to Student List
+    </a>
+  </div>
+</div>
+
+<br><br><br><br><br><br>
+{% endblock content %}

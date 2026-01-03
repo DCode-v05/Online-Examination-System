@@ -1,0 +1,30 @@
+{% extends 'teacher/teacherbase.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+  a:link {
+        text-decoration: none;
+      }
+  </style>
+</head>
+<h2 style="text-align:center; ">Select Course for Questions</h2>
+<form method="GET" action="{% url 'teacher-add-question' %}" autocomplete="off" style="margin:100px;margin-top: 0px;">
+    <div class="form-group">
+      <label for="course_id">Course Name</label>
+      <select id="course_id" name="course_id" class="form-control" required>
+        <option value="">-- Select Course --</option>
+        {% for c in courses %}
+          <option value="{{ c.id }}">{{ c.course_name }} ({{ c.question_number }} questions, {{ c.total_marks }} marks)</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    <button type="submit" class="btn btn-success" style="border-radius: 0%;">Continue</button>
+</form>
+<br><br><br>
+{% endblock content %}

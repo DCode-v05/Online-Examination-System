@@ -1,0 +1,34 @@
+{% extends 'exam/adminbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+  a:link {
+        text-decoration: none;
+      }
+  </style>
+</head>
+<h2 style="text-align:center;">Edit Course</h2>
+<form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;">
+    {%csrf_token%}
+    <div class="form-group">
+      <label for="course_name">Course Name</label>
+      {% render_field courseForm.course_name class="form-control" placeholder="Example: Cloud Computing" %}
+
+      <label for="teacher">Assign Teacher</label>
+      {% render_field teacherForm.teacher class="form-control" %}
+      <small class="form-text text-muted">Current: {% if current_teacher %}{{ current_teacher.get_name }}{% else %}No teacher assigned{% endif %}</small>
+      <br>
+      <small class="form-text text-muted">Total Questions: {{ course.total_questions }} | Total Marks: {{ course.total_marks }}</small>
+    </div>
+    
+
+    <button type="submit" class="btn btn-success" style="border-radius:0px;">Update Course</button>
+    <a href="/admin-view-course" class="btn btn-default" style="border-radius:0px;">Cancel</a>
+  </form>
+<br><br><br>
+{% endblock content %}
