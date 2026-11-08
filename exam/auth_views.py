@@ -26,7 +26,6 @@ def custom_login_view(request, template_name, redirect_url='/afterlogin'):
             user = UserAdapter.authenticate(username, password)
             if user:
                 DynamoDBAuthBackend.login(request, user)
-                # Update last login
                 from datetime import datetime
                 UserAdapter.update(user.get('id'), last_login=datetime.utcnow())
                 return redirect(redirect_url)
@@ -53,7 +52,6 @@ def adminlogin_view(request):
             user = UserAdapter.authenticate(username, password)
             if user and user.get('is_superuser'):
                 DynamoDBAuthBackend.login(request, user)
-                # Update last login
                 from datetime import datetime
                 UserAdapter.update(user.get('id'), last_login=datetime.utcnow())
                 return redirect('/admin-dashboard')

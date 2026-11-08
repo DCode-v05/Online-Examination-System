@@ -23,7 +23,6 @@
     <input type="hidden" name="question_type_{{ forloop.counter }}" value="{{q.question_type}}">
     
     {% if q.question_type == 'radio' %}
-      <!-- Single Choice - Radio Buttons -->
       <div class="form-check mx-4">
         <input class="form-check-input" type="radio" name="question_{{ forloop.counter }}" id="q{{forloop.counter}}_opt1" value="Option1">
         <label class="form-check-label" for="q{{forloop.counter}}_opt1">
@@ -50,7 +49,6 @@
       </div>
       
     {% elif q.question_type == 'checkbox' %}
-      <!-- Multiple Choice - Checkboxes -->
       <div class="form-check mx-4">
         <input class="form-check-input" type="checkbox" name="question_{{ forloop.counter }}" id="q{{forloop.counter}}_opt1" value="Option1">
         <label class="form-check-label" for="q{{forloop.counter}}_opt1">
@@ -77,13 +75,11 @@
       </div>
       
     {% elif q.question_type == 'text' %}
-      <!-- Text Answer -->
       <div class="form-group mx-4">
         <textarea class="form-control" name="question_{{ forloop.counter }}" id="q{{forloop.counter}}_text" rows="4" placeholder="Enter your answer here..."></textarea>
       </div>
       
     {% else %}
-      <!-- Default to Radio (backward compatibility) -->
       <div class="form-check mx-4">
         <input class="form-check-input" type="radio" name="question_{{ forloop.counter }}" id="q{{forloop.counter}}_opt1" value="Option1">
         <label class="form-check-label" for="q{{forloop.counter}}_opt1">
@@ -121,19 +117,17 @@
         var elements = document.getElementsByTagName('input'); 
         var textareas = document.getElementsByTagName('textarea');
         
-        // First, clear all checkbox cookies to avoid duplication
         var checkboxQuestions = new Set();
         for(i = 0; i < elements.length; i++) { 
             if(elements[i].type === "checkbox" && elements[i].name.startsWith('question_')) {
                 var questionNum = elements[i].name.replace('question_', '');
                 if(!checkboxQuestions.has(questionNum)) {
                     checkboxQuestions.add(questionNum);
-                    deleteCookie(questionNum); // Clear before saving
+                    deleteCookie(questionNum);
                 }
             }
         }
         
-        // Handle radio buttons and checkboxes
         for(i = 0; i < elements.length; i++) { 
             if(elements[i].type === "radio") { 
                 if(elements[i].checked) {
@@ -144,7 +138,6 @@
             else if(elements[i].type === "checkbox") {
                 var questionNum = elements[i].name.replace('question_', '');
                 if(elements[i].checked) {
-                    // For checkboxes, append values with comma
                     var existingValue = getCookie(questionNum);
                     if(existingValue && existingValue !== "") {
                         setCookie(questionNum, existingValue + "," + elements[i].value, 3);
@@ -155,7 +148,6 @@
             }
         }
         
-        // Handle text answers
         for(i = 0; i < textareas.length; i++) {
             if(textareas[i].name.startsWith('question_')) {
                 var questionNum = textareas[i].name.replace('question_', '');

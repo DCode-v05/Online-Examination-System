@@ -90,17 +90,14 @@
       const selectedType = typeSelect.value;
       
       if (selectedType === 'text') {
-        // Text type: hide all options, show text answer field
         optionsContainer.style.display = 'none';
         textAnswer.style.display = 'block';
       } else if (selectedType === 'checkbox') {
-        // Checkbox type: show options and multiple answers field
         optionsContainer.style.display = 'block';
         radioAnswer.style.display = 'none';
         checkboxAnswer.style.display = 'block';
         textAnswer.style.display = 'none';
       } else {
-        // Radio type (default): show options and single answer field
         optionsContainer.style.display = 'block';
         radioAnswer.style.display = 'block';
         checkboxAnswer.style.display = 'none';
@@ -108,10 +105,8 @@
       }
     }
 
-    // Initialize on page load
     handleQuestionTypeChange();
     
-    // Handle changes
     typeSelect.addEventListener('change', handleQuestionTypeChange);
   })();
 </script>

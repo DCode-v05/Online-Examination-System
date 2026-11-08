@@ -32,7 +32,6 @@
         <tr>
 
           <th>Name</th>
-          {# Photo column removed #}
           <th>Contact</th>
           <th>Assigned Course</th>
          
@@ -43,7 +42,6 @@
       <tr>
 
         <td> {{t.get_name}}</td>
-  {# profile picture removed - showing no photo #}
         <td>{{t.mobile}}</td>
         <td>{% if t.course %}{{t.course.course_name}}{% else %}<span class="text-muted">Not Assigned</span>{% endif %}</td>
         

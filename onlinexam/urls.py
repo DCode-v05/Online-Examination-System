@@ -5,7 +5,6 @@ from . import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    # Removed: path('admin/', admin.site.urls),  - Not using Django admin
     path('teacher/',include('teacher.urls')),
     path('student/',include('student.urls')),
     

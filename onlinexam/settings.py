@@ -13,40 +13,27 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
 STATIC_DIR=os.path.join(BASE_DIR,'static')
 MEDIA_ROOT=os.path.join(BASE_DIR,'static')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', '@k0#p3kidu)yaaa3u1hplxz)f@^6xiy384*(+n@@s5x#1bx@m5')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-# Database Configuration
-USE_DYNAMODB = os.getenv('USE_DYNAMODB', 'True') == 'True'  # Set to False to use SQLite
+USE_DYNAMODB = os.getenv('USE_DYNAMODB', 'True') == 'True'
 
-# ALLOWED_HOSTS for production
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 if ALLOWED_HOSTS == ['*']:
-    ALLOWED_HOSTS = ['*']  # For development only
+    ALLOWED_HOSTS = ['*']
 
-
-# Application definition
 
 INSTALLED_APPS = [
-    # Removed: 'django.contrib.admin'  - Not needed without Django ORM
-    # Removed: 'django.contrib.auth'   - Using custom DynamoDB auth
-    # Removed: 'django.contrib.contenttypes' - Django ORM dependency
-    'django.contrib.sessions',  # Keep for session management
+    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'exam',
@@ -57,12 +44,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files in production
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
-    # Removed: 'django.contrib.auth.middleware.AuthenticationMiddleware'
-    'auth_backend.AuthenticationMiddleware',  # Custom DynamoDB auth middleware
+    'auth_backend.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -88,29 +73,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'onlinexam.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-# Using DynamoDB only - SQLite/Django ORM is DISABLED
-# Sessions are now stored in memory/cache instead of database
 DATABASES = {
-    # Empty - not using Django ORM
 }
 
-# AWS DynamoDB Configuration
 AWS_REGION = os.getenv('AWS_REGION', 'us-east-1')
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
-# Session Configuration - use cache instead of database
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 86400  # 24 hours
+SESSION_COOKIE_AGE = 86400
 
-
-# Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
-# Using Django's password hashers for DynamoDB users
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -128,9 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE ='Asia/Kolkata'
@@ -142,31 +112,21 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS=[
 STATIC_DIR,
  ]
 
-# WhiteNoise configuration for serving static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL='/afterlogin'
 
-#for contact us give your gmail id and password
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'your_gmail@gmail.com') # this email will be used to send emails
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your_generated_16_digit_app_password') # host email password required
-# now sign in with your host gmail account in your browser
-# open following link and turn it ON
-# https://myaccount.google.com/lesssecureapps
-# otherwise you will get SMTPAuthenticationError at /contactus
-# this process is required because google blocks apps authentication by default
-EMAIL_RECEIVING_USER = [os.getenv('EMAIL_RECEIVING_USER', 'to_email@gmail.com')] # email on which you will receive messages sent from website
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'your_gmail@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your_generated_16_digit_app_password')
+EMAIL_RECEIVING_USER = [os.getenv('EMAIL_RECEIVING_USER', 'to_email@gmail.com')]

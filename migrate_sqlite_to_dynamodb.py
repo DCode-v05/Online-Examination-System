@@ -15,7 +15,6 @@ import os
 import sys
 import django
 
-# Setup Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'onlinexam.settings')
 django.setup()
 
@@ -57,12 +56,10 @@ class DataMigration:
                 self.log(f"Course {course.id}: {course.course_name}")
                 
                 if not self.dry_run:
-                    # Check if already exists in DynamoDB
                     existing = CourseAdapter.get_by_id(course.id)
                     if existing:
                         self.log(f"  → Already exists in DynamoDB, skipping", 'WARN')
                     else:
-                        # CourseAdapter.create expects course_name as positional argument
                         CourseAdapter.create(course.course_name)
                         self.log(f"  → Migrated successfully", 'SUCCESS')
                         self.stats['courses']['migrated'] += 1
@@ -90,12 +87,10 @@ class DataMigration:
                 self.log(f"Teacher {teacher.id}: User {teacher.user.username}")
                 
                 if not self.dry_run:
-                    # Check if already exists in DynamoDB
                     existing = TeacherAdapter.get_by_id(teacher.id)
                     if existing:
                         self.log(f"  → Already exists in DynamoDB, skipping", 'WARN')
                     else:
-                        # TeacherAdapter.create(user_id, mobile, course_id, status, salary)
                         TeacherAdapter.create(
                             user_id=teacher.user_id,
                             mobile=teacher.mobile,
@@ -129,12 +124,10 @@ class DataMigration:
                 self.log(f"Student {student.id}: User {student.user.username}")
                 
                 if not self.dry_run:
-                    # Check if already exists in DynamoDB
                     existing = StudentAdapter.get_by_id(student.id)
                     if existing:
                         self.log(f"  → Already exists in DynamoDB, skipping", 'WARN')
                     else:
-                        # StudentAdapter.create(user_id, mobile)
                         StudentAdapter.create(
                             user_id=student.user_id,
                             mobile=student.mobile
@@ -165,12 +158,10 @@ class DataMigration:
                 self.log(f"Question {question.id}: Course {question.course_id}")
                 
                 if not self.dry_run:
-                    # Check if already exists in DynamoDB
                     existing = QuestionAdapter.get_by_id(question.id)
                     if existing:
                         self.log(f"  → Already exists in DynamoDB, skipping", 'WARN')
                     else:
-                        # QuestionAdapter.create(course_id, marks, question, question_type, ...)
                         QuestionAdapter.create(
                             course_id=question.course_id,
                             marks=question.marks,
@@ -210,12 +201,10 @@ class DataMigration:
                 self.log(f"Result {result.id}: Student {result.student_id}, Exam {result.exam_id}, Marks {result.marks}")
                 
                 if not self.dry_run:
-                    # Check if already exists in DynamoDB
                     existing = ResultAdapter.get_by_id(result.id)
                     if existing:
                         self.log(f"  → Already exists in DynamoDB, skipping", 'WARN')
                     else:
-                        # ResultAdapter.create(student_id, exam_id, marks, needs_review, student_answers)
                         ResultAdapter.create(
                             student_id=result.student_id,
                             exam_id=result.exam_id,
@@ -265,7 +254,6 @@ class DataMigration:
         self.log(f"Dry Run Mode: {self.dry_run}")
         self.log("")
         
-        # Migration order matters: Courses first, then Teachers/Students, then Questions, then Results
         self.migrate_courses()
         self.migrate_teachers()
         self.migrate_students()
@@ -288,7 +276,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Confirmation prompt (unless --force or --dry-run)
     if not args.force and not args.dry_run:
         print("\n" + "=" * 60)
         print("⚠️  WARNING: Data Migration")
@@ -304,7 +291,6 @@ def main():
             print("Migration cancelled.")
             return
     
-    # Run migration
     migration = DataMigration(dry_run=args.dry_run)
     migration.run()
 

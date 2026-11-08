@@ -41,9 +41,7 @@ class QuestionForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
-        # Get courses from DynamoDB via adapter
         courses = CourseAdapter.get_all()
-        # Create choices for the dropdown
         course_choices = [(c.get('id'), c.get('course_name')) for c in courses]
         self.fields['courseID'].choices = [('', 'Course Name')] + course_choices
 

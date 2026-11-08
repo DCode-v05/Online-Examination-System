@@ -83,7 +83,6 @@ class ResultAdapter:
     
     @staticmethod
     def create(student_id, exam_id, marks, needs_review=False, student_answers=None, date=None):
-        # Note: date parameter is ignored as ResultHelper sets it automatically
         return ResultHelper.create(
             str(student_id), str(exam_id), marks,
             needs_review, student_answers

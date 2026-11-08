@@ -43,7 +43,6 @@ class DynamoDBHelper:
         elif isinstance(value, dict):
             return {k: DynamoDBHelper.sanitize_data(v) for k, v in value.items()}
         elif isinstance(value, Decimal):
-            # Convert to int if whole, else float
             return int(value) if value % 1 == 0 else float(value)
         else:
             return value
@@ -56,7 +55,6 @@ class DynamoDBHelper:
         result = {}
         for attr_name in model_instance.get_attributes().keys():
             value = getattr(model_instance, attr_name, None)
-            # Convert Decimal to int/float
             if isinstance(value, Decimal):
                 result[attr_name] = int(value) if value % 1 == 0 else float(value)
             else:
@@ -163,7 +161,6 @@ class QuestionHelper:
             multiple_answers=multiple_answers,
             text_answer=text_answer
         )
-        # 🩵 Fix: sanitize Decimal values before saving
         q.attribute_values = DynamoDBHelper.sanitize_data(q.attribute_values)
         q.save()
         return q
@@ -222,7 +219,6 @@ class ResultHelper:
             needs_review=needs_review,
             student_answers=student_answers
         )
-        # sanitize before saving
         result.attribute_values = DynamoDBHelper.sanitize_data(result.attribute_values)
         result.save()
         return result
@@ -453,7 +449,6 @@ class UserHelper:
     def create(username, email, password, first_name='', last_name='', 
                is_staff=False, is_superuser=False, groups=None):
         """Create a new user with hashed password"""
-        # Generate auto-incrementing ID
         all_users = list(UserDynamoDB.scan())
         if all_users:
             max_id = max(int(u.id) for u in all_users)
@@ -465,7 +460,7 @@ class UserHelper:
             id=user_id,
             username=username,
             email=email,
-            password=make_password(password),  # Hash password
+            password=make_password(password),
             first_name=first_name,
             last_name=last_name,
             is_staff=is_staff,
@@ -507,7 +502,6 @@ class UserHelper:
         try:
             user = UserDynamoDB.get(int(user_id))
             
-            # Update allowed fields
             if 'username' in kwargs:
                 user.username = kwargs['username']
             if 'email' in kwargs:

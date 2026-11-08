@@ -6,10 +6,8 @@ import os
 import sys
 import django
 
-# Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Configure Django settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'onlinexam.settings')
 django.setup()
 
@@ -26,7 +24,6 @@ def create_superuser():
     last_name = input("Last name: ") or "User"
     password = input("Password: ") or "admin123"
     
-    # Check if user already exists
     existing_user = UserAdapter.get_by_username(username)
     if existing_user:
         print(f"\n❌ User '{username}' already exists!")
@@ -39,7 +36,6 @@ def create_superuser():
             return
     
     try:
-        # Create superuser
         user = UserAdapter.create(
             username=username,
             email=email,

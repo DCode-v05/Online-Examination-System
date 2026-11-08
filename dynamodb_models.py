@@ -12,7 +12,6 @@ from datetime import datetime
 import os
 from dynamodb_config import AWS_REGION, TABLE_NAMES
 
-# Indexes for querying
 class UserIdIndex(GlobalSecondaryIndex):
     """Index for querying by user_id"""
     class Meta:
@@ -55,7 +54,6 @@ class UsernameIndex(GlobalSecondaryIndex):
     username = UnicodeAttribute(hash_key=True)
 
 
-# User Model for DynamoDB
 class UserDynamoDB(Model):
     """
     DynamoDB model for User (replaces Django User model)
@@ -75,13 +73,11 @@ class UserDynamoDB(Model):
     is_superuser = BooleanAttribute(default=False)
     date_joined = UTCDateTimeAttribute(default=datetime.utcnow)
     last_login = UTCDateTimeAttribute(null=True)
-    groups = ListAttribute(null=True)  # Store group names as list
+    groups = ListAttribute(null=True)
     
-    # Indexes
     username_index = UsernameIndex()
 
 
-# Course Model
 class CourseDynamoDB(Model):
     """
     DynamoDB model for Course
@@ -90,12 +86,11 @@ class CourseDynamoDB(Model):
         table_name = TABLE_NAMES['course']
         region = AWS_REGION
     
-    id = UnicodeAttribute(hash_key=True)  # UUID
+    id = UnicodeAttribute(hash_key=True)
     course_name = UnicodeAttribute()
-    assigned_teacher_id = UnicodeAttribute(null=True)  # Reference to teacher
+    assigned_teacher_id = UnicodeAttribute(null=True)
 
 
-# Question Model
 class QuestionDynamoDB(Model):
     """
     DynamoDB model for Question
@@ -104,12 +99,12 @@ class QuestionDynamoDB(Model):
         table_name = TABLE_NAMES['question']
         region = AWS_REGION
     
-    id = UnicodeAttribute(hash_key=True)  # UUID
+    id = UnicodeAttribute(hash_key=True)
     course_id = UnicodeAttribute()
     
     marks = NumberAttribute()
     question = UnicodeAttribute()
-    question_type = UnicodeAttribute(default='radio')  # radio, checkbox, text
+    question_type = UnicodeAttribute(default='radio')
     option1 = UnicodeAttribute(null=True)
     option2 = UnicodeAttribute(null=True)
     option3 = UnicodeAttribute(null=True)
@@ -119,7 +114,6 @@ class QuestionDynamoDB(Model):
     text_answer = UnicodeAttribute(null=True)
 
 
-# Result Model
 class ResultDynamoDB(Model):
     """
     DynamoDB model for Result
@@ -128,17 +122,16 @@ class ResultDynamoDB(Model):
         table_name = TABLE_NAMES['result']
         region = AWS_REGION
     
-    id = UnicodeAttribute(hash_key=True)  # UUID
+    id = UnicodeAttribute(hash_key=True)
     student_id = UnicodeAttribute()
-    exam_id = UnicodeAttribute()  # course_id
+    exam_id = UnicodeAttribute()
     
     marks = NumberAttribute()
-    date = UnicodeAttribute(null=True)  # Store as ISO format string
+    date = UnicodeAttribute(null=True)
     needs_review = BooleanAttribute(default=False)
-    student_answers = UnicodeAttribute(null=True)  # JSON string
+    student_answers = UnicodeAttribute(null=True)
 
 
-# Teacher Model
 class TeacherDynamoDB(Model):
     """
     DynamoDB model for Teacher
@@ -147,7 +140,7 @@ class TeacherDynamoDB(Model):
         table_name = TABLE_NAMES['teacher']
         region = AWS_REGION
     
-    id = UnicodeAttribute(hash_key=True)  # UUID
+    id = UnicodeAttribute(hash_key=True)
     user_id = NumberAttribute()
     
     mobile = UnicodeAttribute()
@@ -156,7 +149,6 @@ class TeacherDynamoDB(Model):
     salary = NumberAttribute(null=True)
 
 
-# Student Model
 class StudentDynamoDB(Model):
     """
     DynamoDB model for Student
@@ -165,7 +157,7 @@ class StudentDynamoDB(Model):
         table_name = TABLE_NAMES['student']
         region = AWS_REGION
     
-    id = UnicodeAttribute(hash_key=True)  # UUID
+    id = UnicodeAttribute(hash_key=True)
     user_id = NumberAttribute()
     
     mobile = UnicodeAttribute()

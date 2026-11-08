@@ -98,7 +98,6 @@ class AuthenticationMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
-        # Attach user object to request
         if 'user_id' in request.session:
             request.user = CustomUser(request.session)
         else:
@@ -108,7 +107,6 @@ class AuthenticationMiddleware:
         return response
 
 
-# Decorators to replace Django's auth decorators
 def login_required(login_url='/'):
     """Decorator to require login"""
     def decorator(view_func):
